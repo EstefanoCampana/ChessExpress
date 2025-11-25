@@ -1,17 +1,14 @@
-import { Link, router } from "expo-router";
-import { Chessboard } from 'react-chessboard';
-import { Text, TouchableOpacity, View } from "react-native";
+import { Link } from "expo-router";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 
 
-export default function playChess() {
+export default function PlayChess() {
 
-
+  const board = require("../assets/images/pict.png")
   return (
     <View>
-      <TouchableOpacity onPress={() => router.replace("/homeMenu")}
-      >Return to Main Menu</TouchableOpacity>
-      <Chessboard />
 
+        <Image source={board}/>
         <Link href='/popUpWinner' asChild>
         <TouchableOpacity>
           <Text>Winner</Text>
