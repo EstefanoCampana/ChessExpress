@@ -15,9 +15,7 @@ const HomeScreen = () => (
     <View style={styles.container}>
         <View style={styles.backgroundColorMain}>
         
-        <View>
-        <Image src={logo} style={styles.chessExpressLogo} />
-        </View>
+        <Image source={logo} style={styles.chessExpressLogo} />
 
           <Formik
           initialValues={{
@@ -115,7 +113,6 @@ const styles = StyleSheet.create({
         width: 180, 
         borderColor: "#3bd71cff",
         borderRadius: 90,
-        backgroundColor: "#fff",
         margin: 40,
         alignSelf: "center",
         borderWidth: 3,
