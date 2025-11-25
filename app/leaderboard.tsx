@@ -1,17 +1,30 @@
-import { Text, View } from "react-native";
+import { router } from "expo-router";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function leaderboardChess() {
 
   
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
+    <View>
+      <Text>Leaderboard</Text>
+      <TouchableOpacity onPress={() => router.replace("/homeMenu")}>
+        <Text>Back to Menu</Text>
+      </TouchableOpacity>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  
+  container: {
+
+  },
+
+  trophyIcon1: {
+
+  },
+
+  trophyIcon2: {
+
+  }
+});

@@ -1,7 +1,7 @@
-import { Text, View, StyleSheet, ScrollView, Image, TextInput, TouchableOpacity, BackHandler } from "react-native";
-import { Formik } from "formik";
-import * as Yup from "yup";
 import { router } from "expo-router";
+import { Formik } from "formik";
+import { BackHandler, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import * as Yup from "yup";
 
 const playerNames = Yup.object().shape({
   player1: Yup.string().required("Required"),
@@ -19,9 +19,7 @@ const HomeScreen = () => (
             player2: "Player 2",
           }}
           validationSchema={playerNames}
-          onSubmit={(values) => {
-            
-          }}
+          onSubmit={(values) => {console.log(values);}}
         >
             {({
             handleChange,
