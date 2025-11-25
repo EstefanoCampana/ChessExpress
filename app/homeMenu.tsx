@@ -57,8 +57,8 @@ const HomeScreen = () => (
               <TouchableOpacity style={[styles.playerFormMain, {borderColor: "#dab11eff", borderWidth: 2}]} onPress={() => router.replace("/leaderboard")}>
                 <Text style={{textAlign:"center", color:"#dab11eff", top: 12}}>LEADERBOARDS</Text>
                 <View style={styles.row}>
-                  <Image source={trophy} style={[styles.trophy, { left: 130, bottom: 16 }]} />
-                  <Image source={trophy} style={[styles.trophy, { right: 130, bottom: 16 }]} />
+                  <Image source={trophy} style={[styles.trophy, { left: 110, bottom: 16 }]} />
+                  <Image source={trophy} style={[styles.trophy, { right: 110, bottom: 16 }]} />
                 </View>
 
               </TouchableOpacity>
@@ -75,7 +75,7 @@ const HomeScreen = () => (
                   });
                 }}
               >
-                <Text style={{color: "#1ace3eff"}}>PLAY NOW</Text>
+                <Text style={{color: "#1ace3eff"}}>PLAY</Text>
               </TouchableOpacity>
 
               <TouchableOpacity onPress={() => BackHandler.exitApp()}>
