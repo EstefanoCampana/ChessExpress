@@ -1,6 +1,6 @@
 import { router } from "expo-router";
 import { Formik } from "formik";
-import { BackHandler, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { BackHandler, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import * as Yup from "yup";
 
 const playerNames = Yup.object().shape({
@@ -8,11 +8,17 @@ const playerNames = Yup.object().shape({
   player2: Yup.string().required("Required"),
 });
 
+const logo = require("../assets/images/chessExpressLogo.png");
+const trophy = require("../assets/images/8348232.png");
+
 const HomeScreen = () => (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
         <View style={styles.backgroundColorMain}>
-            
-            
+        
+        <View>
+        <Image src={logo} style={styles.chessExpressLogo} />
+        </View>
+
           <Formik
           initialValues={{
             player1: "Player 1",
@@ -30,10 +36,10 @@ const HomeScreen = () => (
             touched,
           }) => (
             <>
-              
+
               <TextInput
-                style={styles.playerFormMain}
-                placeholder="Player 1"
+                style={[styles.playerFormMain, {borderColor: "#dab11eff", borderWidth: 2}]}
+                placeholder="Player 1 Display Name:"
                 onChangeText={handleChange("player1")}
                 onBlur={handleBlur("player1")}
                 value={values.player1}
@@ -41,16 +47,21 @@ const HomeScreen = () => (
               {touched.player1 && errors.player1 && <Text style={styles.error}>{errors.player1}</Text>}
 
               <TextInput
-                style={styles.playerFormMain}
-                placeholder="Player 2"
+                style={[styles.playerFormMain, {borderColor: "#dab11eff", borderWidth: 2}]}
+                placeholder="Player 2 Display Name:"
                 onChangeText={handleChange("player2")}
                 onBlur={handleBlur("player2")}
                 value={values.player2}
               />
               {touched.player2 && errors.player2 && <Text style={styles.error}>{errors.player2}</Text>}
 
-              <TouchableOpacity style={styles.playerFormMain} onPress={() => router.replace("/leaderboard")}>
-                <Text>LEADERBOARDS</Text>
+              <TouchableOpacity style={[styles.playerFormMain, {borderColor: "#dab11eff", borderWidth: 2}]} onPress={() => router.replace("/leaderboard")}>
+                <Text style={{textAlign:"center", color:"#dab11eff", top: 12}}>LEADERBOARDS</Text>
+                <View style={styles.row}>
+                  <Image source={trophy} style={[styles.trophy, { left: 180, bottom: 16 }]} />
+                  <Image source={trophy} style={[styles.trophy, { right: 180, bottom: 16 }]} />
+                </View>
+
               </TouchableOpacity>
 
               <View style={styles.row}>
@@ -65,7 +76,7 @@ const HomeScreen = () => (
                   });
                 }}
               >
-                <Text>PLAY NOW</Text>
+                <Text style={{color: "#1ace3eff"}}>PLAY NOW</Text>
               </TouchableOpacity>
 
               <TouchableOpacity onPress={() => BackHandler.exitApp()}>
@@ -79,7 +90,7 @@ const HomeScreen = () => (
           </Formik>
 
         </View>
-    </ScrollView>
+    </View>
   );
 
 export default HomeScreen;
@@ -87,30 +98,36 @@ export default HomeScreen;
 const styles = StyleSheet.create({
 
     container: {
-        backgroundColor: "#000000ff",
-        
+      backgroundColor: "#242323ff",
+      flex: 1,
+      padding: 100
     },
 
     backgroundColorMain: {
-      backgroundColor: "#383838ff"
+      flex: 1,
+      backgroundColor: "#383838ff",
+      padding: 50,
+      borderRadius: 20,
     },
 
     chessExpressLogo: {
-        resizeMode: "cover",
-        borderRadius: 10,
-        height: 20,
-        width: 20, 
-        tintColor: "#ffff"
+        height: 180,
+        width: 180, 
+        borderColor: "#3bd71cff",
+        borderRadius: 90,
+        backgroundColor: "#fff",
+        margin: 40,
+        alignSelf: "center",
+        borderWidth: 3,
     },
 
     playerFormMain: {
       height: 50,
-      borderColor: "#ccc",
-      borderWidth: 1,
       borderRadius: 10,
       paddingHorizontal: 14,
       marginBottom: 10,
-      backgroundColor: "#f8fafc",
+      color: "#bbb9b9ff",
+      backgroundColor: "#2d2d2dff"
     },
 
     error: {
@@ -120,16 +137,32 @@ const styles = StyleSheet.create({
   },
 
   buttonExitGame: {
-    backgroundColor: "#ff0000ff"
+    backgroundColor: "#2d2d2dff",
+    margin: 50,
+    borderColor: "#ff0000ff",
+    padding: 10,
+    borderWidth: 2,
+    borderRadius: 10,
+    color: "#ff0000ff",
   },
 
   buttonPlayNow: {
-    backgroundColor: "#1ace3eff"
+    backgroundColor: "#2d2d2dff",
+    margin: 50,
+    borderColor: "#1ace3eff",
+    borderWidth: 2,
+    padding: 10,
+    borderRadius: 10,
   },
 
   row: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "center",
+  },
+
+  trophy: {
+    width: 40,
+    height: 40,
   }
 
 })

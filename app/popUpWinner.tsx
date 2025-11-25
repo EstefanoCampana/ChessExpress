@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     color: "#ffffff",
     height: 50,
     width: 50,
-  },
+  },  
 
 
   playAgain: {

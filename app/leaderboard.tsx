@@ -9,6 +9,9 @@ export default function leaderboardChess() {
       <Text>Leaderboard</Text>
       <TouchableOpacity onPress={() => router.replace("/homeMenu")}>
         <Text>Back to Menu</Text>
+        <Text>Esta7272</Text>
+        <Text>Jordy</Text>
+
       </TouchableOpacity>
     </View>
   );
