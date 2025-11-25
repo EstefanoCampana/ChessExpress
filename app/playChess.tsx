@@ -1,6 +1,7 @@
-import { router } from "expo-router";
+import { Link, router } from "expo-router";
 import { Chessboard } from 'react-chessboard';
-import { TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
+
 
 export default function playChess() {
 
@@ -10,6 +11,13 @@ export default function playChess() {
       <TouchableOpacity onPress={() => router.replace("/homeMenu")}
       >Return to Main Menu</TouchableOpacity>
       <Chessboard />
+
+        <Link href='/popUpWinner' asChild>
+        <TouchableOpacity>
+          <Text>Winner</Text>
+          
+        </TouchableOpacity>
+        </Link>
       
     </View>
   );
