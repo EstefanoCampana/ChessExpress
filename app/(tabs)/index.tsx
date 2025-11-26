@@ -1,3 +1,4 @@
+"use client"
 import { router } from "expo-router";
 import { Formik } from "formik";
 import { BackHandler, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
@@ -9,8 +10,8 @@ const playerNames = Yup.object().shape({
   player2: Yup.string().required("Required"),
 });
 
-const logo = require("../assets/images/chessExpressLogo.png");
-const trophy = require("../assets/images/8348232.png");
+const logo = require("../../assets/images/chessExpressLogo.png");
+const trophy = require("../../assets/images/8348232.png");
 
 const HomeScreen = () => (
     <SafeAreaView style={styles.container}>
@@ -75,19 +76,17 @@ const HomeScreen = () => (
                   });
                 }}
               >
-                <Text style={{color: "#1ace3eff"}}>PLAY NOW</Text>
+                <Text style={{color: "#1ace3eff", textAlign: "center"}}>PLAY</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => BackHandler.exitApp()}>
-                <Text style={styles.buttonExitGame}>EXIT GAME</Text>
+              <TouchableOpacity onPress={() => BackHandler.exitApp()} style={styles.buttonExitGame}>
+                <Text style={{color: "#ff0000ff", textAlign: "center"}} >EXIT</Text>
               </TouchableOpacity>
               </View>
 
             </>
           )}
-          
           </Formik>
-
         </View>
     </SafeAreaView>
   );
@@ -117,6 +116,7 @@ const styles = StyleSheet.create({
         margin: 40,
         alignSelf: "center",
         borderWidth: 3,
+        backgroundColor: "#fff"
     },
 
     playerFormMain: {
@@ -127,44 +127,31 @@ const styles = StyleSheet.create({
       color: "#bbb9b9ff",
       backgroundColor: "#2d2d2dff"
     },
-
-    error: {
-    color: "red",
-    fontSize: 12,
-    marginBottom: 10,
+    buttonExitGame: {
+      backgroundColor: "#2d2d2dff",
+      margin: 50,
+      borderColor: "#ff0000ff",
+      padding: 10,
+      width: 100,
+      borderWidth: 2,
+      borderRadius: 10,
   },
-
-  buttonExitGame: {
-    backgroundColor: "#2d2d2dff",
-    margin: 50,
-    borderColor: "#ff0000ff",
-    padding: 10,
-    borderWidth: 2,
-    borderRadius: 10,
-    color: "#ff0000ff",
-  },
-
   buttonPlayNow: {
-    backgroundColor: "#2d2d2dff",
-    margin: 50,
-    borderColor: "#1ace3eff",
-    borderWidth: 2,
-    padding: 10,
-    borderRadius: 10,
+      backgroundColor: "#2d2d2dff",
+      margin: 50,
+      borderColor: "#1ace3eff",
+      width: 100,
+      borderWidth: 2,
+      padding: 10,
+      borderRadius: 10,
   },
-
   row: {
-    flexDirection: "row",
-    justifyContent: "center",
+      flexDirection: "row",
+      justifyContent: "center",
   },
-
   trophy: {
-    width: 40,
-    height: 40,
+      width: 40,
+      height: 40,
   }
 
 })
-
-
-
-
