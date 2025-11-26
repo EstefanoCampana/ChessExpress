@@ -152,6 +152,11 @@ const styles = StyleSheet.create({
   trophy: {
       width: 40,
       height: 40,
-  }
+  },
+
+  error: {
+    color: "#ff0000ff",
+    marginBottom: 10,
+  },
 
 })
