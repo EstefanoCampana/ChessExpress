@@ -1,32 +1,54 @@
 "use client"
-import WinnerPopUpComp from "@/components/popUpWinner";
-import { useState } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ChessBoard } from "@/components/Chessboard";
+import { useEffect, useState } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaView } from "react-native-safe-area-context";
 
 
+
 export default function PlayChess() {
-  const [isWinner, setIsWinner] = useState(false);
-  const board = require("../assets/images/pict.png")
+  const [isWinner, setIsWinner] = useState(false);  
+  const [time, setTime] = useState(300); 
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTime((prev) => {
+        if (prev <= 0) return 0;
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  
+  const formatTime = (t: number): string => {
+    const mins = Math.floor(t / 60);
+    const secs = t % 60;
+    return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+  };
+  
   return (
+    <GestureHandlerRootView style={{flex:1}}>
     <SafeAreaView style={{flex: 1, backgroundColor: "#333"}}>
-      {isWinner && <WinnerPopUpComp/>}
       <Text style={{textAlign: "center", fontSize: 32, fontWeight: "bold", color: "#fff", marginTop: 20}}>Blitz</Text>
       <View style={styles.container}>
         <View style={styles.timerBar}>
           <Text style={styles.playerName2}>Player 2</Text>
-          <Text style={styles.timerText2}>1:14</Text>
+          <Text style={styles.timerText2}>{formatTime(time)}</Text>
         </View>
-          <Image source={board} style={styles.board}/>
+      <ChessBoard/>
         <View style={styles.timerBar}>
           <Text style={styles.playerName}>Player 1</Text>
-          <Text style={styles.timerText}>2:40</Text>
+          <Text style={styles.timerText}>{formatTime(time)}</Text>
         </View>
           <TouchableOpacity onPress={() => setIsWinner(true)} style={styles.button}>
-            <Text style={{color: "#fff"}}>Winner</Text>
+            <Text style={{color: "#fff"}}>Pause</Text>
           </TouchableOpacity>
       </View>
     </SafeAreaView>
+    </GestureHandlerRootView>
   );
 }
 const styles = StyleSheet.create({
@@ -47,7 +69,12 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginVertical: 20,
   },
-
+board: {
+        width: "90%",
+        height: "50%",
+        aspectRatio: 1,
+        borderRadius: 10,
+  },
   playerName: {
     color: "white",
     fontSize: 18,
@@ -70,16 +97,10 @@ const styles = StyleSheet.create({
     transform: [{rotate: "180deg"}]
   },
 
-  board: {
-    width: "90%",
-    height: "50%",
-    aspectRatio: 1,
-    borderRadius: 10,
-  },
 
   button: {
     marginTop: 10,
-    backgroundColor: "#1ace3e",
+    backgroundColor: "#181717a7",
     padding: 12,
     borderRadius: 10,
   },

@@ -2,11 +2,11 @@ import { router } from "expo-router";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function WinnerPopUpComp() {
+export default function WinnerPopUpComp({winner}: {winner: string}) {
   return (
     <SafeAreaView style={{flex:1, justifyContent: "center", alignItems: "center", position: "absolute", backgroundColor: "#1a161699", zIndex: 2, top: 0, left:0, right:0, bottom:0}}>
       <View style={styles.container}>
-        <Text style={{color:"#ffff", fontSize: 20, fontWeight: "black", textAlign: "center"}}>Player 1 Won!</Text>
+        <Text style={{color:"#ffff", fontSize: 20, fontWeight: "black", textAlign: "center"}}>{winner} Won!</Text>
         <TouchableOpacity style={styles.playAgain} onPress={() => router.replace("/playChess")}>
           <Text style={{textAlign: "center"}}>Play Again</Text>
         </TouchableOpacity>
