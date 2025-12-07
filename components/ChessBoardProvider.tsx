@@ -1,37 +1,37 @@
 import { Chess, Square } from 'chess.js';
 import React, {
-    createContext,
-    useContext,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
 } from 'react';
 import type { StyleProp, TextStyle, ViewStyle } from 'react-native';
 
 import {
-    defaultAlphaNotationStyle,
-    defaultBoardStyle,
-    defaultDarkSquareNotationStyle,
-    defaultDarkSquareStyle,
-    defaultDropSquareStyle,
-    defaultLightSquareNotationStyle,
-    defaultLightSquareStyle,
-    defaultNumericNotationStyle,
-    defaultSquareStyle,
+  defaultAlphaNotationStyle,
+  defaultBoardStyle,
+  defaultDarkSquareNotationStyle,
+  defaultDarkSquareStyle,
+  defaultDropSquareStyle,
+  defaultLightSquareNotationStyle,
+  defaultLightSquareStyle,
+  defaultNumericNotationStyle,
+  defaultSquareStyle,
 } from './defaults';
 import { defaultPieces } from './pieces';
 import WinnerPopUpComp from './popUpWinner';
 import type {
-    PieceHandlerArgs,
-    PieceRenderObject,
-    PositionDataType,
-    SquareDataType,
-    SquareHandlerArgs,
+  PieceHandlerArgs,
+  PieceRenderObject,
+  PositionDataType,
+  SquareDataType,
+  SquareHandlerArgs,
 } from './types';
 import {
-    fenStringToPositionObject,
-    generateBoard,
+  fenStringToPositionObject,
+  generateBoard,
 } from './utils';
 
 type Defined<T> = T extends undefined ? never : T;
@@ -65,6 +65,8 @@ type ContextType = {
   // selection state
   selectedSquare: string | null;
   legalMoves: string[];
+  timer: number;
+  timer2: number;
 
   // handlers for UI
   handleSquarePress: ({ piece, square }: SquareHandlerArgs) => void;
@@ -87,6 +89,8 @@ export type ChessboardOptions = {
   boardOrientation?: 'white' | 'black';
   chessboardRows?: number;
   chessboardColumns?: number;
+  time: number;
+  turn: string
 
   // styles
   boardStyle?: StyleProp<ViewStyle>;
@@ -131,6 +135,7 @@ export function ChessboardProvider({
     boardOrientation = 'white',
     chessboardRows = 8,
     chessboardColumns = 8,
+    time = 300,
 
     // styles
     boardStyle = defaultBoardStyle(chessboardColumns),
@@ -155,6 +160,8 @@ export function ChessboardProvider({
   // chess engine
   const gameRef = useRef(new Chess());
   const [winner, setWinner] = useState<string | null>(null)
+  const [turn, setTurn] = useState<'w' | 'b'>('b');
+
 
   // current piece map on the board
   const [currentPosition, setCurrentPosition] = useState<PositionDataType>(
@@ -172,6 +179,8 @@ export function ChessboardProvider({
   // selection state for tap-to-move
   const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
   const [legalMoves, setLegalMoves] = useState<string[]>([]);
+  const [timer, setTimer] = useState(time);
+  const [timer2, setTimer2] = useState(time);
 
   // keep chess.js in sync with initial position (FEN only for now)
   useEffect(() => {
@@ -182,10 +191,26 @@ export function ChessboardProvider({
         console.warn('Invalid FEN passed to ChessBoard:', e);
       }
     } else {
-      // If you want to support object position -> fen, you can add a helper here
-      // For now we assume FEN string inputs for external positions.
     }
   }, [position]);
+  useEffect(() => {
+
+    const interval = setInterval(() => {
+      if (winner) return;
+      if (turn === 'b') {
+        setTimer((prev) => (prev > 0 ? prev - 1 : 0));
+      } else {
+        setTimer2((prev) => (prev > 0 ? prev - 1 : 0));
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [turn]);
+  useEffect(() => {
+    if (timer === 0) { setWinner("Black") };
+    if (timer2 === 0) { setWinner("White") };
+  }, [timer, timer2]);
+
 
   // helper: color from pieceType "wP"/"bK"
   const getPieceColor = (pieceType: string) =>
@@ -194,6 +219,7 @@ export function ChessboardProvider({
   // main tap handler for squares
   const handleSquarePress = ({ piece, square }: SquareHandlerArgs) => {
     const game = gameRef.current;
+
 
     // user callback (raw)
     onSquareClick?.({ piece, square });
@@ -248,48 +274,45 @@ export function ChessboardProvider({
 
     // CASE 2: attempt a move from selectedSquare -> tapped square
     if (selectedSquare && legalMoves.includes(square)) {
-        const move = {
-            from: selectedSquare,
-            to: square,
-            promotion: 'q' as const, // auto promote to queen for simplicity
-        };
+      const move = {
+        from: selectedSquare,
+        to: square,
+        promotion: 'q' as const
+      };
 
-        const result = game.move(move);
+      const result = game.move(move);
 
-        if (result) {
-                // 🔥 Notify parent about the move (new callback)
-                onMove?.({
-                from: result.from,
-                to: result.to,
-                piece:
-                    (result.color === 'w' ? 'w' : 'b') +
-                    result.piece.toUpperCase(),
-                san: result.san,
-                });
-                if (game.isCheckmate()){
-                    const winnerColor = result.color === "w" ? "White" : "Black";
-                    setWinner(winnerColor);
-                }
-            // Update position from new FEN
-                const newFen = game.fen();
-                const newPos = fenStringToPositionObject(
-                newFen,
-                chessboardRows,
-                chessboardColumns,
-                );
-                setCurrentPosition(newPos);
-
-                // Clear selection + legal moves
-                setSelectedSquare(null);
-                setLegalMoves([]);
-            }
+      if (result) {
+        setTurn(sideToMove);
+        console.log(turn);
+        onMove?.({
+          from: result.from,
+          to: result.to,
+          piece:
+            (result.color === 'w' ? 'w' : 'b') +
+            result.piece.toUpperCase(),
+          san: result.san,
+        });
+        if (game.isCheckmate()) {
+          const winnerColor = result.color === "w" ? "White" : "Black";
+          setWinner(winnerColor);
         }
+        const newFen = game.fen();
+        const newPos = fenStringToPositionObject(
+          newFen,
+          chessboardRows,
+          chessboardColumns,
+        );
+        setCurrentPosition(newPos);
+
+        setSelectedSquare(null);
+        setLegalMoves([]);
+      }
     }
+  }
 
   const handlePiecePress = ({ piece, square }: PieceHandlerArgs) => {
-    // If you want to support separate piece-press logic, use this.
     onPieceClick?.({ piece, square });
-    // Optional: you could call handleSquarePress here as well.
   };
 
   return (
@@ -301,6 +324,8 @@ export function ChessboardProvider({
         boardOrientation,
         chessboardRows,
         chessboardColumns,
+        timer,
+        timer2,
 
         boardStyle,
         squareStyle,
@@ -325,8 +350,9 @@ export function ChessboardProvider({
         handlePiecePress,
       }}
     >
-        {winner && <WinnerPopUpComp winner={winner}/>}
-        {children}
+
+      {winner && <WinnerPopUpComp winner={winner} />}
+      {children}
     </ChessboardContext.Provider>
   );
 }
