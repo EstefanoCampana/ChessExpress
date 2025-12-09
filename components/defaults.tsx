@@ -55,24 +55,3 @@ export const defaultNumericNotationStyle: TextStyle = {
   top: 2,
   left: 2,
 };
-
-export const defaultDraggingPieceStyle: ViewStyle = {
-  // RN transform is an array
-  transform: [{ scale: 1.2 }],
-};
-
-export const defaultDraggingPieceGhostStyle: ViewStyle = {
-  opacity: 0.5,
-};
-
-export const defaultArrowOptions = {
-  color: '#ffaa00',
-  secondaryColor: '#4caf50',
-  tertiaryColor: '#f44336',
-  arrowLengthReducerDenominator: 8,
-  sameTargetArrowLengthReducerDenominator: 4,
-  arrowWidthDenominator: 5,
-  activeArrowWidthMultiplier: 0.9,
-  opacity: 0.65,
-  activeOpacity: 0.5,
-};
