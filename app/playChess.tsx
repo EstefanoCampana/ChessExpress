@@ -1,6 +1,6 @@
 "use client"
 import { ChessBoard } from "@/components/Chessboard";
-import { useSettingsContext } from "@/components/SettingsPorvider";
+import { useSettingsContext } from "@/components/SettingsProvider";
 import { StyleSheet, View } from "react-native";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaView } from "react-native-safe-area-context";

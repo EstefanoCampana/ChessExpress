@@ -1,9 +1,9 @@
 "use client"
 
-import { useSettingsContext } from "@/components/SettingsPorvider";
 import { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useSettingsContext } from "../../components/SettingsProvider";
 
 export default function Settings() {
     const { setTime } = useSettingsContext();
