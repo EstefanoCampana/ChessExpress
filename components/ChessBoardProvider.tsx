@@ -63,6 +63,7 @@ type ContextType = {
 
   selectedSquare: string | null;
   legalMoves: string[];
+  time: number;
   timer: number;
   timer2: number;
   turn: "w" | "b";
@@ -84,7 +85,7 @@ export type ChessboardOptions = {
   boardOrientation?: "white" | "black";
   chessboardRows?: number;
   chessboardColumns?: number;
-  time: number;
+  time?: number;
 
   boardStyle?: StyleProp<ViewStyle>;
   squareStyle?: StyleProp<ViewStyle>;
@@ -146,7 +147,7 @@ export function ChessboardProvider({
 
   const gameRef = useRef(new Chess());
   const [winner, setWinner] = useState<string | null>(null);
-  const [turn, setTurn] = useState<"w" | "b">("b");
+  const [turn, setTurn] = useState<'w' | 'b'>('w');
 
   const [currentPosition, setCurrentPosition] = useState<PositionDataType>(
     typeof position === "string"
@@ -177,7 +178,7 @@ export function ChessboardProvider({
   useEffect(() => {
     const interval = setInterval(() => {
       if (winner) return;
-      if (turn === "b") {
+      if (turn === "w") {
         setTimer((prev) => (prev > 0 ? prev - 1 : 0));
       } else {
         setTimer2((prev) => (prev > 0 ? prev - 1 : 0));
@@ -188,8 +189,8 @@ export function ChessboardProvider({
   }, [turn, winner]);
 
   useEffect(() => {
-    if (timer === 0) setWinner("Black");
-    if (timer2 === 0) setWinner("White");
+    if (timer === 0) setWinner(playerNames.player2);
+    if (timer2 === 0) setWinner(playerNames.player1);
   }, [timer, timer2]);
 
   const getPieceColor = (pieceType: string) =>
@@ -251,7 +252,8 @@ export function ChessboardProvider({
       const result = game.move(move);
 
       if (result) {
-        setTurn(game.turn() as "w" | "b");
+        setTurn(game.turn());
+        console.log(turn)
 
         onMove?.({
           from: result.from,
@@ -300,6 +302,7 @@ export function ChessboardProvider({
         boardOrientation,
         chessboardRows,
         chessboardColumns,
+        time,
         timer,
         timer2,
         turn,

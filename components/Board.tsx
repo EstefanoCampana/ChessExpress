@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useChessboardContext } from './ChessBoardProvider';
 import { defaultBoardStyle } from './defaults';
@@ -14,14 +14,13 @@ export function Board() {
     boardStyle,
     chessboardColumns,
     currentPosition,
+    time,
     timer,
     timer2,
     turn,
   } = useChessboardContext();
 
-  const [isPaused, setIsPaused] = useState(false);
-
-  const isWhiteTurn = turn === 'w';
+  const isWhiteTurn = turn === 'b';
 
   const formatTime = (t: number): string => {
     const mins = Math.floor(t / 60);
@@ -32,9 +31,9 @@ export function Board() {
   return (
     <View>
       <Text style={{ textAlign: "center", fontSize: 32, fontWeight: "bold", color: "#fff" }}>Blitz</Text>
-    
-      <View style={styles.timerBar}>
-        <Text style={[styles.playerName2, !isWhiteTurn ? styles.timerText : styles.timerTextActive]}>{playerNames.player2}</Text>
+
+      <View style={isWhiteTurn ? styles.timerBarActive : styles.timerBar}>
+        <Text style={[styles.playerName2, styles.timerText2]}>{playerNames.player2}</Text>
         <Text style={styles.timerText2}>{formatTime(timer2)}</Text>
       </View>
 
@@ -55,10 +54,10 @@ export function Board() {
         )}
       </View>
 
-      <View style={styles.timerBar}>
-        <Text style={[styles.playerName, isWhiteTurn ? styles.timerText : styles.timerTextActive,]}>{playerNames.player1}</Text>
+      <View style={isWhiteTurn ? styles.timerBar : styles.timerBarActive}>
+        <Text style={[styles.playerName, styles.timerText]}>{playerNames.player1}</Text>
         <Text style={styles.timerText}>{formatTime(timer)}</Text>
-      
+
       </View>
     </View>
   );
@@ -79,26 +78,27 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
   },
-  timerTextActive: {
-    color: "#09f509ff",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
   timerText2: {
     color: "white",
     fontSize: 18,
     fontWeight: "bold",
     transform: [{ rotate: "180deg" }]
   },
-  timerText2Active: {
-    color: "#09f509ff",
-    fontSize: 18,
-    fontWeight: "bold",
-    transform: [{ rotate: "180deg" }]
+  timerNull: {
+    visibility: "hidden"
   },
   timerBar: {
     width: "100%",
     backgroundColor: "#2d2d2d",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 15,
+    borderRadius: 15,
+    marginVertical: 20,
+  },
+  timerBarActive: {
+    width: "100%",
+    backgroundColor: "#09f509a7",
     flexDirection: "row",
     justifyContent: "space-between",
     padding: 15,
