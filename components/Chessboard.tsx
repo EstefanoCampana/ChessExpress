@@ -19,7 +19,7 @@ export function ChessBoard({ options }: ChessboardProps) {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    height: "45%",
+    height: "35%",
     aspectRatio: 1,
     justifyContent: "center",
     alignItems: "center"

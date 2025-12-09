@@ -67,6 +67,7 @@ type ContextType = {
   legalMoves: string[];
   timer: number;
   timer2: number;
+  turn: 'w' | 'b'; 
 
   // handlers for UI
   handleSquarePress: ({ piece, square }: SquareHandlerArgs) => void;
@@ -160,7 +161,7 @@ export function ChessboardProvider({
   // chess engine
   const gameRef = useRef(new Chess());
   const [winner, setWinner] = useState<string | null>(null)
-  const [turn, setTurn] = useState<'w' | 'b'>('b');
+const [turn, setTurn] = useState<'w' | 'b'>(() => game.turn() as 'w' | 'b');
 
 
   // current piece map on the board
@@ -232,6 +233,7 @@ export function ChessboardProvider({
     }
 
     const sideToMove = game.turn(); // 'w' or 'b'
+
 
     // CASE 1: no selection yet, tap on a piece
     if (!selectedSquare && pieceOnSquare) {
@@ -326,6 +328,7 @@ export function ChessboardProvider({
         chessboardColumns,
         timer,
         timer2,
+        turn,
 
         boardStyle,
         squareStyle,

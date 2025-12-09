@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { useChessboardContext } from './ChessBoardProvider';
 import { defaultBoardStyle } from './defaults';
 import { Piece } from './Piece';
@@ -13,11 +13,13 @@ export function Board() {
     chessboardColumns,
     currentPosition,
     timer,
-    timer2
+    timer2,
+    turn,
   } = useChessboardContext();
 
   const [isPaused, setIsPaused] = useState(false);
 
+  const isWhiteTurn = turn === 'w';
 
   const formatTime = (t: number): string => {
     const mins = Math.floor(t / 60);
@@ -28,10 +30,12 @@ export function Board() {
   return (
     <View>
       <Text style={{ textAlign: "center", fontSize: 32, fontWeight: "bold", color: "#fff" }}>Blitz</Text>
+    
       <View style={styles.timerBar}>
-        <Text style={styles.playerName2}>Player 2</Text>
+        <Text style={[styles.playerName2, !isWhiteTurn ? styles.timerText : styles.timerTextActive]}>Player 2</Text>
         <Text style={styles.timerText2}>{formatTime(timer2)}</Text>
       </View>
+
       <View style={[defaultBoardStyle(chessboardColumns), boardStyle]}>
         {board.map((row) =>
           row.map((square) => {
@@ -48,13 +52,12 @@ export function Board() {
           }),
         )}
       </View>
+
       <View style={styles.timerBar}>
-        <Text style={styles.playerName}>Player 1</Text>
+        <Text style={[styles.playerName, isWhiteTurn ? styles.timerText : styles.timerTextActive,]}>Player 1</Text>
         <Text style={styles.timerText}>{formatTime(timer)}</Text>
+      
       </View>
-      <TouchableOpacity onPress={() => setIsPaused(true)} style={styles.button}>
-        <Text style={{ color: "#fff" }}>Pause</Text>
-      </TouchableOpacity>
     </View>
   );
 }
@@ -74,8 +77,19 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
   },
+  timerTextActive: {
+    color: "#09f509ff",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
   timerText2: {
     color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
+    transform: [{ rotate: "180deg" }]
+  },
+  timerText2Active: {
+    color: "#09f509ff",
     fontSize: 18,
     fontWeight: "bold",
     transform: [{ rotate: "180deg" }]
