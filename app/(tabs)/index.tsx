@@ -4,8 +4,9 @@ import { Formik } from "formik";
 import { BackHandler, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Yup from "yup";
+import { setPlayerNames } from "../../components/playerNames";
 
-const playerNames = Yup.object().shape({
+const playerNamesSchema = Yup.object().shape({
   player1: Yup.string().required("Required"),
   player2: Yup.string().required("Required"),
 });
@@ -21,16 +22,19 @@ const HomeScreen = () => (
 
           <Formik
           initialValues={{
-            player1: "Player 1",
-            player2: "Player 2",
+            player1: "Player1",
+            player2: "Player2",
           }}
-          validationSchema={playerNames}
-          onSubmit={(values) => {console.log(values);}}
+          validationSchema={playerNamesSchema}
+          onSubmit={(values) => {
+            setPlayerNames(values.player1, values.player2);
+            router.push("/playChess");
+        }}
         >
             {({
             handleChange,
             handleBlur,
-            submitForm,
+            handleSubmit,
             values,
             errors,
             touched,
@@ -65,17 +69,8 @@ const HomeScreen = () => (
               </TouchableOpacity>
 
               <View style={styles.row}>
-              <TouchableOpacity style={styles.buttonPlayNow} onPress={async () => {
-
-                  router.push({
-                    pathname: "/playChess",
-                    params: {
-                      player1: values.player1,
-                      player2: values.player2,
-                    },
-                  });
-                }}
-              >
+              <TouchableOpacity style={styles.buttonPlayNow} onPress={handleSubmit as any}>
+              
                 <Text style={{color: "#1ace3eff", textAlign: "center"}}>PLAY</Text>
               </TouchableOpacity>
 

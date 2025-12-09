@@ -1,15 +1,27 @@
+"use client";
 import { router } from "expo-router";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
+import { getFullLeaderboard, LeaderboardEntry } from "../components/leaderboardStorage";
 
 const logo = require("../assets/images/chessExpressLogo.png");
 const trophy = require("../assets/images/8348232.png");
 
 export default function Leaderboard() {
+  const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      const data = await getFullLeaderboard();
+      setEntries(data);
+    })();
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.innerCard}>
-        
         <View style={styles.headerRow}>
           <Image source={trophy} style={styles.trophy} />
           <Image source={logo} style={styles.logo} />
@@ -17,25 +29,33 @@ export default function Leaderboard() {
         </View>
 
         <View style={styles.leaderboardList}>
-
-          <View style={styles.scoreBox}>
-            <Text style={styles.playerName}>Player 1</Text>
-            <Text style={styles.winCount}>5 wins</Text>
-          </View>
-
-          <View style={styles.scoreBox}>
-            <Text style={styles.playerName}>Player 2</Text>
-            <Text style={styles.winCount}>2 wins</Text>
-          </View>
-
+          {entries.length === 0 ? (
+            <Text style={[styles.playerName, { textAlign: "center" }]}>
+              No games recorded yet.
+            </Text>
+          ) : (
+            <FlatList
+              data={entries}
+              keyExtractor={(item) => item.name}
+              renderItem={({ item, index }) => (
+                <View style={styles.scoreBox}>
+                  <Text style={styles.playerName}>
+                    {index + 1}. {item.name}
+                  </Text>
+                  <Text style={styles.winCount}>{item.wins} wins</Text>
+                </View>
+              )}
+              ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
+            />
+          )}
         </View>
 
         <TouchableOpacity
           style={styles.returnButton}
-          onPress={() => router.replace("(tabs)")}>
+          onPress={() => router.replace("(tabs)")}
+        >
           <Text style={styles.returnButtonText}>Return to Menu</Text>
         </TouchableOpacity>
-
       </View>
     </SafeAreaView>
   );
@@ -75,12 +95,11 @@ const styles = StyleSheet.create({
     borderRadius: 60,
     borderWidth: 3,
     borderColor: "#3bd71cff",
-    backgroundColor: "#fff"
+    backgroundColor: "#fff",
   },
 
   leaderboardList: {
     width: "100%",
-    gap: 15,
     marginBottom: 40,
   },
 

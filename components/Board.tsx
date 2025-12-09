@@ -4,7 +4,9 @@ import { StyleSheet, Text, View } from 'react-native';
 import { useChessboardContext } from './ChessBoardProvider';
 import { defaultBoardStyle } from './defaults';
 import { Piece } from './Piece';
+import playerNames from "./playerNames";
 import { Square } from './Square';
+
 
 export function Board() {
   const {
@@ -32,7 +34,7 @@ export function Board() {
       <Text style={{ textAlign: "center", fontSize: 32, fontWeight: "bold", color: "#fff" }}>Blitz</Text>
     
       <View style={styles.timerBar}>
-        <Text style={[styles.playerName2, !isWhiteTurn ? styles.timerText : styles.timerTextActive]}>Player 2</Text>
+        <Text style={[styles.playerName2, !isWhiteTurn ? styles.timerText : styles.timerTextActive]}>{playerNames.player2}</Text>
         <Text style={styles.timerText2}>{formatTime(timer2)}</Text>
       </View>
 
@@ -54,7 +56,7 @@ export function Board() {
       </View>
 
       <View style={styles.timerBar}>
-        <Text style={[styles.playerName, isWhiteTurn ? styles.timerText : styles.timerTextActive,]}>Player 1</Text>
+        <Text style={[styles.playerName, isWhiteTurn ? styles.timerText : styles.timerTextActive,]}>{playerNames.player1}</Text>
         <Text style={styles.timerText}>{formatTime(timer)}</Text>
       
       </View>
